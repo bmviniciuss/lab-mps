@@ -1,4 +1,4 @@
-package business.exceptions;
+package util;
 
 public class UserPasswordValidationException extends Exception{
     public UserPasswordValidationException(String errorMessage) {
