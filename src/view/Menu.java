@@ -1,5 +1,10 @@
 package view;
 
+import business.control.UserController;
+import business.exceptions.UserLoginValidationException;
+import business.exceptions.UserPasswordValidationException;
+import business.model.User;
+
 import java.util.Scanner;
 
 public class Menu {
@@ -26,6 +31,12 @@ public class Menu {
                         return;
                     case 1:
                         System.out.println("Criar novo usuário");
+                        System.out.println("Insira o login:");
+                        String login = reader.next();
+                        System.out.println("Insira senha: ");
+                        String password = reader.next();
+                        User toCreateUser = new User(login, password);
+                        new UserController().add(toCreateUser);
                         break;
                     default:
                         System.out.println("Operação não suportada");
@@ -33,6 +44,8 @@ public class Menu {
                 }
 
 
+            } catch (UserLoginValidationException | UserPasswordValidationException e) {
+                System.out.println(e.getMessage());
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
