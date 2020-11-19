@@ -1,15 +1,23 @@
 package business.control;
 
-import business.exceptions.UserLoginValidationException;
-import business.exceptions.UserPasswordValidationException;
+import util.UserLoginValidationException;
+import util.UserPasswordValidationException;
 import business.model.IUser;
 
-public class UserController {
+import java.io.Serializable;
+import java.util.TreeMap;
+
+public class UserController implements Serializable {
+
+    private TreeMap<String, IUser> users;
 
     private int USER_LOGIN_MAX_LENGTH = 20;
     private int USER_PASSWORD_MIN_LENGTH = 8;
     private int USER_PASSWORD_MAX_LENGTH = 12;
 
+    public UserController(){
+        users = new TreeMap<>();
+    }
 
     private void validateUserLogin(IUser user) throws UserLoginValidationException {
         if(user.getLogin().isEmpty()) {
@@ -40,8 +48,12 @@ public class UserController {
                     + this.USER_PASSWORD_MIN_LENGTH);
         }
 
-        if(!(user.getPassword().matches(".*\\d.*\\d.*") && user.getPassword().matches(".*\\w+.*"))) {
-            throw new UserPasswordValidationException("Password must have letters and at least 2 numbers");
+        if(!(user.getPassword().matches(".*\\d.*\\d.*"))) {
+            throw new UserPasswordValidationException("Password must have at least 2 numbers");
+        }
+
+        if(!(user.getPassword().matches(".*[A-Za-z]+.*"))) {
+            throw new UserPasswordValidationException("Password must have letters");
         }
     }
 
@@ -52,5 +64,22 @@ public class UserController {
 
     public void add(IUser toCreateUser) throws UserLoginValidationException, UserPasswordValidationException {
         this.validateUser(toCreateUser);
+
+        users.put(toCreateUser.getLogin(), toCreateUser);
+    }
+
+    public void delete(String login){
+        if (users.containsKey(login)) {
+            users.remove(login);
+            System.out.println("O usuário foi removido com sucesso!");
+        }else{
+            System.out.println("Login informado não existe");
+        }
+    }
+
+    public void listAll(){
+        for(String login : users.keySet()){
+            System.out.println(login);
+        }
     }
 }
