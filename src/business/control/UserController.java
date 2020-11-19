@@ -44,4 +44,9 @@ public class UserController {
             throw new UserPasswordValidationException("Password must have letters and at least 2 numbers");
         }
     }
+
+    private void validateUser(IUser user) throws UserLoginValidationException, UserPasswordValidationException {
+        this.validateUserLogin(user);
+        this.validateUserPassword(user);
+    }
 }
