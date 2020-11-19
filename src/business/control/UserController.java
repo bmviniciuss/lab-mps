@@ -49,4 +49,8 @@ public class UserController {
         this.validateUserLogin(user);
         this.validateUserPassword(user);
     }
+
+    public void add(IUser toCreateUser) throws UserLoginValidationException, UserPasswordValidationException {
+        this.validateUser(toCreateUser);
+    }
 }
