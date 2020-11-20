@@ -1,82 +1,98 @@
 package view;
 
+import business.control.DateComparator;
+import business.control.LoginComparator;
 import business.control.UserController;
-import util.InfraException;
-import util.UserLoginValidationException;
-import util.UserPasswordValidationException;
-import business.model.User;
+import business.model.Date;
 import infra.UserPersistence;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import util.*;
+import business.model.User;
 import java.util.Scanner;
 
 public class Menu {
     private String menuChooseOptionText() {
-        String s = "\n# Escolha a opção:\n";
-        s += "\t1 - Criar usuário\n";
-        s += "\t2 - Listar usuários\n";
-        s += "\t3 - Excluir usuário\n";
-        s += "\t0 - Sair\n";
+        String s = "\n# Choose Option:\n";
+        s += "\t1 - Add User\n";
+        s += "\t2 - List users by login\n";
+        s += "\t3 - List users by birthdate\n";
+        s += "\t4 - Search user\n";
+        s += "\t5 - Remove User\n";
+        s += "\t0 - Exit\n";
         return s;
     }
 
+    private void validateDate(String date) throws DateValidationException {
+        if(!(date.matches("^([0-2][0-9]|(3)[0-1])(\\/)(((0)[0-9])|((1)[0-2]))(\\/)\\d{4}$"))) {
+            throw new DateValidationException("Invalid date format.");
+        }
+    }
+
     public void run() {
-
-        UserController controller;
-
-        File f = new File("users.ser");
-
-        try {
-            if (f.exists()) {
-                controller = UserPersistence.load();
-            } else {
-                controller = new UserController();
-            }
-
-            while (true) {
+        UserController controller = new UserController(new UserPersistence());
+        while (true) {
+            try {
                 Scanner reader = new Scanner(System.in);
                 System.out.println(this.menuChooseOptionText());
-
                 int op = reader.nextInt();
-
                 switch (op) {
                     case 0:
+                        // exit
                         reader.close();
-                        UserPersistence.save(controller);
-                        System.out.println("Saindo da aplicação...");
+                        System.out.println("Exit...");
                         return;
                     case 1:
-                        System.out.println("Criar novo usuário");
-                        System.out.println("Insira o login:");
+                        // create new user
+                        System.out.println("# Create User");
+
+                        System.out.println("Login:");
                         String login = reader.next();
-                        System.out.println("Insira senha:");
+
+                        System.out.println("Password:");
                         String password = reader.next();
-                        User toCreateUser = new User(login, password);
+
+                        System.out.println("Birthdate (DD/MM/AAAA):");
+                        String date = reader.next();
+
+                        this.validateDate(date);
+                        Date birth_date = new Date(date);
+
+                        User toCreateUser = new User(login, password, birth_date);
                         controller.add(toCreateUser);
-                        UserPersistence.save(controller);
                         break;
                     case 2:
-                        System.out.println("Usuários:");
-                        controller.listAll();
+                        // List users by login
+                        System.out.println("# List Users (sorted by login):");
+                        controller.list(new LoginComparator());
                         break;
                     case 3:
-                        System.out.println("Informe o login do usuário:");
-                        String delete = reader.next();
-                        controller.delete(delete);
-                        UserPersistence.save(controller);
+                        // List users by age
+                        System.out.println("# List Users (sorted by age):");
+                        controller.list(new DateComparator());
+                        break;
+                    case 4:
+                        // Search User
+                        System.out.println("# Search User");
+                        System.out.println("Login: ");
+                        String toSearchLogin = reader.next();
+                        controller.listSingleUser(toSearchLogin);
+                        break;
+                    case 5:
+                        // Remover User
+                        System.out.println("# Remove User");
+                        System.out.println("Login: ");
+                        String toDeleteLogin = reader.next();
+                        controller.delete(toDeleteLogin);
+                        System.out.println("User deleted successfully.");
                         break;
                     default:
-                        System.out.println("Operação não suportada.");
+                        System.out.println("Not supported.");
                         break;
                 }
-            }
 
-        } catch (UserLoginValidationException | UserPasswordValidationException | InfraException e) {
-            System.out.println(e.getMessage());
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+            } catch (UserLoginValidationException | UserPasswordValidationException | InfraException | DateValidationException | UserNotFoundException e) {
+                System.out.println(e.getMessage());
+            }
         }
+
     }
 }

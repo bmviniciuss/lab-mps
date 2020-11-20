@@ -1,22 +1,28 @@
 package business.control;
 
+import infra.IUserPersistence;
+import util.InfraException;
 import util.UserLoginValidationException;
+import util.UserNotFoundException;
 import util.UserPasswordValidationException;
 import business.model.IUser;
 
 import java.io.Serializable;
-import java.util.TreeMap;
+import java.util.Comparator;
+import java.util.TreeSet;
 
 public class UserController implements Serializable {
 
-    private TreeMap<String, IUser> users;
+    private TreeSet<IUser> users;
+    private IUserPersistence userPersistence;
 
     private int USER_LOGIN_MAX_LENGTH = 20;
     private int USER_PASSWORD_MIN_LENGTH = 8;
     private int USER_PASSWORD_MAX_LENGTH = 12;
 
-    public UserController(){
-        users = new TreeMap<>();
+    public UserController(IUserPersistence userPersistence){
+        users = new TreeSet<>();
+        this.userPersistence = userPersistence;
     }
 
     private void validateUserLogin(IUser user) throws UserLoginValidationException {
@@ -62,24 +68,46 @@ public class UserController implements Serializable {
         this.validateUserPassword(user);
     }
 
-    public void add(IUser toCreateUser) throws UserLoginValidationException, UserPasswordValidationException {
+    public void add(IUser toCreateUser) throws UserLoginValidationException, UserPasswordValidationException, InfraException {
         this.validateUser(toCreateUser);
-
-        users.put(toCreateUser.getLogin(), toCreateUser);
+        this.users.add(toCreateUser);
+        this.userPersistence.save(users);
     }
 
-    public void delete(String login){
-        if (users.containsKey(login)) {
-            users.remove(login);
-            System.out.println("O usuário foi removido com sucesso!");
-        }else{
-            System.out.println("Login informado não existe");
+    private IUser getUserByLogin(String login) throws UserNotFoundException, InfraException {
+        this.users = this.userPersistence.load();
+        for(IUser user:this.users){
+            if(user.getLogin().equals(login)) {
+                return user;
+            }
+        }
+        throw new UserNotFoundException();
+    }
+
+    public void delete(String login) throws InfraException, UserNotFoundException {
+        IUser toRemoveUser = this.getUserByLogin(login);
+        users.remove(toRemoveUser);
+        this.userPersistence.save(users);
+    }
+
+    public void listSingleUser(String login) throws InfraException, UserNotFoundException {
+        IUser user = this.getUserByLogin(login);
+        this.printUser(user);
+    }
+
+    public void list(Comparator<IUser> comparator) throws  InfraException {
+        this.users = this.userPersistence.load();
+        TreeSet<IUser> sortedUsers = new TreeSet<IUser>(comparator);
+        sortedUsers.addAll(this.users);
+
+        for(IUser user : sortedUsers){
+            System.out.println(this.printUser(user));
         }
     }
 
-    public void listAll(){
-        for(String login : users.keySet()){
-            System.out.println(login);
-        }
+    private String printUser(IUser user) {
+        String s = "";
+        s += user.getLogin() + " - " + user.getBirthdate();
+        return s;
     }
 }

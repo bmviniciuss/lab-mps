@@ -1,48 +1,57 @@
 package infra;
 
-import business.control.UserController;
+import business.model.IUser;
 import util.InfraException;
 
 import java.io.*;
-//import java.util.logging.Level;
-//import java.util.logging.Logger;
+import java.util.TreeSet;
 
 
-public abstract class UserPersistence {
+public class UserPersistence implements IUserPersistence  {
+    private String fileName;
+    private File file;
+    public UserPersistence() {
+        this.fileName = "users.ser";
+        this.file = new File(this.fileName);
+    }
 
-    public static void save(UserController uc) throws InfraException {
-        FileOutputStream fos;
+    @Override
+    public TreeSet<IUser> load() throws InfraException {
         try {
-            fos = new FileOutputStream("users.ser", false);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(uc);
-            oos.close();
-        } catch (FileNotFoundException ex) {
-            throw new InfraException("Erro na escrita do arquivo.");
-            //Logger.getLogger(Serializer.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            throw new InfraException("Erro no fluxo de saída do arquivo.");
-            //Logger.getLogger(Serializer.class.getName()).log(Level.SEVERE, null, ex);
+            if(!this.file.exists()) {
+                this.file.createNewFile();
+            }
+
+            FileInputStream fis = new FileInputStream(this.file);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            TreeSet<IUser> users = (TreeSet) ois.readObject();
+
+            ois.close();
+            fis.close();
+
+            return users;
+        } catch (EOFException e) {
+            return new TreeSet<IUser>();
+        } catch (IOException | ClassNotFoundException e) {
+//            System.err.println(e);
+            throw new InfraException("An unexpected error has occurred.");
         }
     }
 
-    public static UserController load() throws InfraException{
-        FileInputStream fis;
+    @Override
+    public void save(TreeSet<IUser> users) throws InfraException {
         try {
-            fis = new FileInputStream("users.ser");
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            UserController uc = (UserController) ois.readObject();
-            ois.close();
-            return uc;
-        } catch (FileNotFoundException ex) {
-            throw new InfraException("Erro na leitura do arquivo.");
-            //Logger.getLogger(Serializer.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            throw new InfraException("Erro no fluxo de entrada do arquivo.");
-            //Logger.getLogger(Serializer.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            throw new InfraException("Erro na construção do modelo de dados.");
-            //Logger.getLogger(Serializer.class.getName()).log(Level.SEVERE, null, ex);
+            this.file.createNewFile();
+            FileOutputStream fos = new FileOutputStream(this.file, false);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+            oos.writeObject(users);
+            oos.close();
+            fos.close();
+
+        } catch (IOException e) {
+//            System.err.println(e);
+            throw new InfraException("An unexpected error has occurred.");
         }
     }
 }
