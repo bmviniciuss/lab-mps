@@ -16,17 +16,9 @@ public class User implements IUser, Comparable<User>{
         return login;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
     @Override
     public String getPassword() {
         return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     @Override
