@@ -87,10 +87,11 @@ public class UserController implements Serializable {
     }
 
     public void list(Comparator<IUser> comparator) throws  InfraException {
-        this.users = new TreeSet<IUser>(comparator);
-        this.users.addAll(this.userPersistence.load());
+        this.users = this.userPersistence.load();
+        TreeSet<IUser> sortedUsers = new TreeSet<IUser>(comparator);
+        sortedUsers.addAll(this.users);
 
-        for(IUser user : users){
+        for(IUser user : sortedUsers){
             System.out.println(this.printUser(user));
         }
     }
