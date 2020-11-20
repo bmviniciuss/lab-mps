@@ -101,22 +101,4 @@ public class UserController implements Serializable {
         s += user.getLogin() + " - " + user.getBirthdate();
         return s;
     }
-
-    public void listAll() throws InfraException {
-        this.users = this.userPersistence.load();
-        for(IUser user : users){
-            System.out.println(user.getLogin());
-        }
-    }
-
-    public void listByDate() throws InfraException {
-        this.users = this.userPersistence.load();
-        TreeSet<IUser> usersDate = new TreeSet<>(new DateComparator());
-        for(IUser user : users){
-            usersDate.add(user);
-        }
-        for(IUser user : usersDate){
-            System.out.println(user.getLogin() + " - " + user.getBirthdate().toString());
-        }
-    }
 }
