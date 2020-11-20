@@ -11,7 +11,7 @@ public class DateComparator implements Comparator<IUser> {
         if (user1.getBirthdate().getYear() > user2.getBirthdate().getYear())
             return 1;
         if (user1.getBirthdate().getYear() == user2.getBirthdate().getYear())
-            if (user1.getBirthdate().getMonth() < user2.getBirthdate().getYear())
+            if (user1.getBirthdate().getMonth() < user2.getBirthdate().getMonth())
                 return -1;
         if (user1.getBirthdate().getMonth() > user2.getBirthdate().getMonth())
             return 1;
