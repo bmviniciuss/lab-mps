@@ -92,7 +92,7 @@ public class UserController implements Serializable {
 
     public void listSingleUser(String login) throws InfraException, UserNotFoundException {
         IUser user = this.getUserByLogin(login);
-        this.printUser(user);
+        System.out.println(this.printUser(user));
     }
 
     public void list(Comparator<IUser> comparator) throws  InfraException {
