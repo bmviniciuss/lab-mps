@@ -82,6 +82,7 @@ public class Menu {
                         System.out.println("Login: ");
                         String toDeleteLogin = reader.next();
                         controller.delete(toDeleteLogin);
+                        System.out.println("User deleted successfully.");
                         break;
                     default:
                         System.out.println("Not supported.");
