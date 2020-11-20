@@ -4,10 +4,7 @@ import business.control.DateComparator;
 import business.control.LoginComparator;
 import business.control.UserController;
 import business.model.Date;
-import util.DateValidationException;
-import util.InfraException;
-import util.UserLoginValidationException;
-import util.UserPasswordValidationException;
+import util.*;
 import business.model.User;
 import java.util.Scanner;
 
@@ -77,9 +74,7 @@ public class Menu {
                 }
             }
 
-        } catch (UserLoginValidationException | UserPasswordValidationException | InfraException | DateValidationException e) {
-            System.out.println(e.getMessage());
-        } catch (Exception e) {
+        } catch (UserLoginValidationException | UserPasswordValidationException | InfraException | DateValidationException | UserNotFoundException e) {
             System.out.println(e.getMessage());
         }
     }

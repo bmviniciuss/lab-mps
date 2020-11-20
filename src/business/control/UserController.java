@@ -4,6 +4,7 @@ import infra.IUserPersistence;
 import infra.UserPersistence;
 import util.InfraException;
 import util.UserLoginValidationException;
+import util.UserNotFoundException;
 import util.UserPasswordValidationException;
 import business.model.IUser;
 
@@ -74,16 +75,25 @@ public class UserController implements Serializable {
         this.userPersistence.save(users);
     }
 
-    public void delete(String login) throws InfraException {
-        for(IUser user : users) {
-            if (user.getLogin().equals(login)) {
-                users.remove(user);
-                this.userPersistence.save(users);
-                System.out.println("O usuário foi removido com sucesso!");
-            } else {
-                System.out.println("Login informado não existe");
+    private IUser getUserByLogin(String login) throws UserNotFoundException, InfraException {
+        this.users = this.userPersistence.load();
+        for(IUser user:this.users){
+            if(user.getLogin().equals(login)) {
+                return user;
             }
         }
+        throw new UserNotFoundException();
+    }
+
+    public void delete(String login) throws InfraException, UserNotFoundException {
+        IUser toRemoveUser = this.getUserByLogin(login);
+        users.remove(toRemoveUser);
+        this.userPersistence.save(users);
+    }
+
+    public void listSingleUser(String login) throws InfraException, UserNotFoundException {
+        IUser user = this.getUserByLogin(login);
+        this.printUser(user);
     }
 
     public void list(Comparator<IUser> comparator) throws  InfraException {
