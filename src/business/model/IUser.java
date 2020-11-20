@@ -1,6 +1,9 @@
 package business.model;
 
-public interface IUser {
+import java.io.Serializable;
+
+public interface IUser extends Serializable{
     public String getLogin();
     public String getPassword();
+    public Date getBirth_date();
 }
