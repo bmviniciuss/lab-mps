@@ -3,12 +3,12 @@ package business.model;
 public class User implements IUser, Comparable<User>{
     private String login;
     private String password;
-    private Date birth_date;
+    private Date birthdate;
 
-    public User(String login, String password, Date birth_date) {
+    public User(String login, String password, Date birthdate) {
         this.login = login;
         this.password = password;
-        this.birth_date = birth_date;
+        this.birthdate = birthdate;
     }
 
     @Override
@@ -30,12 +30,8 @@ public class User implements IUser, Comparable<User>{
     }
 
     @Override
-    public Date getBirth_date() {
-        return birth_date;
-    }
-
-    public void setBirth_date(Date birth_date) {
-        this.birth_date = birth_date;
+    public Date getBirthdate() {
+        return this.birthdate;
     }
 
     @Override

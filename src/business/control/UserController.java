@@ -91,7 +91,7 @@ public class UserController implements Serializable {
             usersDate.add(user);
         }
         for(IUser user : usersDate){
-            System.out.println(user.getLogin() + " - " + user.getBirth_date().toString());
+            System.out.println(user.getLogin() + " - " + user.getBirthdate().toString());
         }
     }
 }
