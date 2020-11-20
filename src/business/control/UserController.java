@@ -8,6 +8,7 @@ import util.UserPasswordValidationException;
 import business.model.IUser;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.TreeSet;
 
 public class UserController implements Serializable {
@@ -83,6 +84,21 @@ public class UserController implements Serializable {
                 System.out.println("Login informado não existe");
             }
         }
+    }
+
+    public void list(Comparator<IUser> comparator) throws  InfraException {
+        this.users = new TreeSet<IUser>(comparator);
+        this.users.addAll(this.userPersistence.load());
+
+        for(IUser user : users){
+            System.out.println(this.printUser(user));
+        }
+    }
+
+    private String printUser(IUser user) {
+        String s = "";
+        s += user.getLogin() + " - " + user.getBirthdate();
+        return s;
     }
 
     public void listAll() throws InfraException {

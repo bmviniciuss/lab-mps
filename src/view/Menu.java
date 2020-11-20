@@ -1,5 +1,7 @@
 package view;
 
+import business.control.DateComparator;
+import business.control.LoginComparator;
 import business.control.UserController;
 import business.model.Date;
 import util.DateValidationException;
@@ -58,11 +60,11 @@ public class Menu {
                         break;
                     case 2:
                         System.out.println("Users (sorted by login):");
-                        controller.listAll();
+                        controller.list(new LoginComparator());
                         break;
                     case 3:
                         System.out.println("Users (sorted by age):");
-                        controller.listByDate();
+                        controller.list(new DateComparator());
                         break;
                     case 4:
                         System.out.println("User login:");
