@@ -1,7 +1,6 @@
 package business.control;
 
 import infra.IUserPersistence;
-import infra.UserPersistence;
 import util.InfraException;
 import util.UserLoginValidationException;
 import util.UserNotFoundException;
@@ -21,9 +20,9 @@ public class UserController implements Serializable {
     private int USER_PASSWORD_MIN_LENGTH = 8;
     private int USER_PASSWORD_MAX_LENGTH = 12;
 
-    public UserController(){
+    public UserController(IUserPersistence userPersistence){
         users = new TreeSet<>();
-        this.userPersistence = new UserPersistence();
+        this.userPersistence = userPersistence;
     }
 
     private void validateUserLogin(IUser user) throws UserLoginValidationException {

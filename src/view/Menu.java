@@ -4,6 +4,7 @@ import business.control.DateComparator;
 import business.control.LoginComparator;
 import business.control.UserController;
 import business.model.Date;
+import infra.UserPersistence;
 import util.*;
 import business.model.User;
 import java.util.Scanner;
@@ -27,7 +28,7 @@ public class Menu {
     }
 
     public void run() {
-        UserController controller = new UserController();
+        UserController controller = new UserController(new UserPersistence());
         while (true) {
             try {
                 Scanner reader = new Scanner(System.in);
