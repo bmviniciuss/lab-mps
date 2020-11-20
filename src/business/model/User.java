@@ -1,6 +1,6 @@
 package business.model;
 
-public class User implements IUser, Comparable<User>{
+public class User implements IUser {
     private String login;
     private String password;
     private Date birthdate;
@@ -27,7 +27,7 @@ public class User implements IUser, Comparable<User>{
     }
 
     @Override
-    public int compareTo(User u) {
-        return this.getLogin().compareTo(u.getLogin());
+    public int compareTo(IUser user) {
+        return this.getLogin().compareTo(user.getLogin());
     }
 }
