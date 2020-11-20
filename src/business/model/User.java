@@ -36,7 +36,6 @@ public class User implements IUser, Comparable<User>{
 
     @Override
     public int compareTo(User u) {
-        int cmp = this.getLogin().compareTo(u.getLogin());
-        return cmp;
+        return this.getLogin().compareTo(u.getLogin());
     }
 }
