@@ -1,5 +1,8 @@
 package business.control;
 
+import infra.IUserPersistence;
+import infra.UserPersistence;
+import util.InfraException;
 import util.UserLoginValidationException;
 import util.UserPasswordValidationException;
 import business.model.IUser;
@@ -10,6 +13,7 @@ import java.util.TreeSet;
 public class UserController implements Serializable {
 
     private TreeSet<IUser> users;
+    private IUserPersistence userPersistence;
 
     private int USER_LOGIN_MAX_LENGTH = 20;
     private int USER_PASSWORD_MIN_LENGTH = 8;
@@ -17,6 +21,7 @@ public class UserController implements Serializable {
 
     public UserController(){
         users = new TreeSet<>();
+        this.userPersistence = new UserPersistence();
     }
 
     private void validateUserLogin(IUser user) throws UserLoginValidationException {
@@ -62,16 +67,17 @@ public class UserController implements Serializable {
         this.validateUserPassword(user);
     }
 
-    public void add(IUser toCreateUser) throws UserLoginValidationException, UserPasswordValidationException {
+    public void add(IUser toCreateUser) throws UserLoginValidationException, UserPasswordValidationException, InfraException {
         this.validateUser(toCreateUser);
-
-        users.add(toCreateUser);
+        this.users.add(toCreateUser);
+        this.userPersistence.save(users);
     }
 
-    public void delete(String login){
+    public void delete(String login) throws InfraException {
         for(IUser user : users) {
             if (user.getLogin().equals(login)) {
                 users.remove(user);
+                this.userPersistence.save(users);
                 System.out.println("O usuário foi removido com sucesso!");
             } else {
                 System.out.println("Login informado não existe");
@@ -79,13 +85,15 @@ public class UserController implements Serializable {
         }
     }
 
-    public void listAll(){
+    public void listAll() throws InfraException {
+        this.users = this.userPersistence.load();
         for(IUser user : users){
             System.out.println(user.getLogin());
         }
     }
 
-    public void listByDate(){
+    public void listByDate() throws InfraException {
+        this.users = this.userPersistence.load();
         TreeSet<IUser> usersDate = new TreeSet<>(new DateComparator());
         for(IUser user : users){
             usersDate.add(user);

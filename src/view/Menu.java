@@ -7,11 +7,6 @@ import util.InfraException;
 import util.UserLoginValidationException;
 import util.UserPasswordValidationException;
 import business.model.User;
-import infra.UserPersistence;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Scanner;
 
 public class Menu {
@@ -32,18 +27,8 @@ public class Menu {
     }
 
     public void run() {
-
-        UserController controller;
-
-        File f = new File("users.ser");
-
+        UserController controller = new UserController();
         try {
-            if (f.exists()) {
-                controller = UserPersistence.load();
-            } else {
-                controller = new UserController();
-            }
-
             while (true) {
                 Scanner reader = new Scanner(System.in);
                 System.out.println(this.menuChooseOptionText());
@@ -53,7 +38,6 @@ public class Menu {
                 switch (op) {
                     case 0:
                         reader.close();
-                        UserPersistence.save(controller);
                         System.out.println("Exit...");
                         return;
                     case 1:
@@ -71,7 +55,6 @@ public class Menu {
 
                         User toCreateUser = new User(login, password, birth_date);
                         controller.add(toCreateUser);
-                        UserPersistence.save(controller);
                         break;
                     case 2:
                         System.out.println("Users (sorted by login):");
@@ -85,7 +68,6 @@ public class Menu {
                         System.out.println("User login:");
                         String delete = reader.next();
                         controller.delete(delete);
-                        UserPersistence.save(controller);
                         break;
                     default:
                         System.out.println("Not supported.");
