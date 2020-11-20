@@ -1,15 +1,23 @@
 package business.control;
 
-import business.exceptions.UserLoginValidationException;
-import business.exceptions.UserPasswordValidationException;
+import util.UserLoginValidationException;
+import util.UserPasswordValidationException;
 import business.model.IUser;
 
-public class UserController {
+import java.io.Serializable;
+import java.util.TreeSet;
+
+public class UserController implements Serializable {
+
+    private TreeSet<IUser> users;
 
     private int USER_LOGIN_MAX_LENGTH = 20;
     private int USER_PASSWORD_MIN_LENGTH = 8;
     private int USER_PASSWORD_MAX_LENGTH = 12;
 
+    public UserController(){
+        users = new TreeSet<>();
+    }
 
     private void validateUserLogin(IUser user) throws UserLoginValidationException {
         if(user.getLogin().isEmpty()) {
@@ -40,8 +48,12 @@ public class UserController {
                     + this.USER_PASSWORD_MIN_LENGTH);
         }
 
-        if(!(user.getPassword().matches(".*\\d.*\\d.*") && user.getPassword().matches(".*\\w+.*"))) {
-            throw new UserPasswordValidationException("Password must have letters and at least 2 numbers");
+        if(!(user.getPassword().matches(".*\\d.*\\d.*"))) {
+            throw new UserPasswordValidationException("Password must have at least 2 numbers");
+        }
+
+        if(!(user.getPassword().matches(".*[A-Za-z]+.*"))) {
+            throw new UserPasswordValidationException("Password must have letters");
         }
     }
 
@@ -52,5 +64,34 @@ public class UserController {
 
     public void add(IUser toCreateUser) throws UserLoginValidationException, UserPasswordValidationException {
         this.validateUser(toCreateUser);
+
+        users.add(toCreateUser);
+    }
+
+    public void delete(String login){
+        for(IUser user : users) {
+            if (user.getLogin().equals(login)) {
+                users.remove(user);
+                System.out.println("O usuário foi removido com sucesso!");
+            } else {
+                System.out.println("Login informado não existe");
+            }
+        }
+    }
+
+    public void listAll(){
+        for(IUser user : users){
+            System.out.println(user.getLogin());
+        }
+    }
+
+    public void listByDate(){
+        TreeSet<IUser> usersDate = new TreeSet<>(new DateComparator());
+        for(IUser user : users){
+            usersDate.add(user);
+        }
+        for(IUser user : usersDate){
+            System.out.println(user.getLogin() + " - " + user.getBirth_date().toString());
+        }
     }
 }
