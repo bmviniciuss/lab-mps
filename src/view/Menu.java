@@ -14,7 +14,8 @@ public class Menu {
         s += "\t1 - Add User\n";
         s += "\t2 - List users by login\n";
         s += "\t3 - List users by birthdate\n";
-        s += "\t4 - Remove User\n";
+        s += "\t4 - Search user\n";
+        s += "\t5 - Remove User\n";
         s += "\t0 - Exit\n";
         return s;
     }
@@ -27,22 +28,24 @@ public class Menu {
 
     public void run() {
         UserController controller = new UserController();
-        try {
-            while (true) {
+        while (true) {
+            try {
                 Scanner reader = new Scanner(System.in);
                 System.out.println(this.menuChooseOptionText());
-
                 int op = reader.nextInt();
-
                 switch (op) {
                     case 0:
+                        // exit
                         reader.close();
                         System.out.println("Exit...");
                         return;
                     case 1:
-                        System.out.println("Create new user");
+                        // create new user
+                        System.out.println("# Create User");
+
                         System.out.println("Login:");
                         String login = reader.next();
+
                         System.out.println("Password:");
                         String password = reader.next();
 
@@ -56,26 +59,38 @@ public class Menu {
                         controller.add(toCreateUser);
                         break;
                     case 2:
-                        System.out.println("Users (sorted by login):");
+                        // List users by login
+                        System.out.println("# List Users (sorted by login):");
                         controller.list(new LoginComparator());
                         break;
                     case 3:
-                        System.out.println("Users (sorted by age):");
+                        // List users by age
+                        System.out.println("# List Users (sorted by age):");
                         controller.list(new DateComparator());
                         break;
                     case 4:
-                        System.out.println("User login:");
-                        String delete = reader.next();
-                        controller.delete(delete);
+                        // Search User
+                        System.out.println("# Search User");
+                        System.out.println("Login: ");
+                        String toSearchLogin = reader.next();
+                        controller.listSingleUser(toSearchLogin);
+                        break;
+                    case 5:
+                        // Remover User
+                        System.out.println("# Remove User");
+                        System.out.println("Login: ");
+                        String toDeleteLogin = reader.next();
+                        controller.delete(toDeleteLogin);
                         break;
                     default:
                         System.out.println("Not supported.");
                         break;
                 }
-            }
 
-        } catch (UserLoginValidationException | UserPasswordValidationException | InfraException | DateValidationException | UserNotFoundException e) {
-            System.out.println(e.getMessage());
+            } catch (UserLoginValidationException | UserPasswordValidationException | InfraException | DateValidationException | UserNotFoundException e) {
+                System.out.println(e.getMessage());
+            }
         }
+
     }
 }
