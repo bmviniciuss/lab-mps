@@ -10,6 +10,7 @@ import java.util.TreeSet;
 public class UserPersistence implements IUserPersistence  {
     private String fileName;
     private File file;
+
     public UserPersistence() {
         this.fileName = "users.ser";
         this.file = new File(this.fileName);
