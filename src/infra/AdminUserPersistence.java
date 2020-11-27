@@ -6,12 +6,20 @@ import java.io.*;
 import java.util.TreeSet;
 
 public class AdminUserPersistence implements IUserPersistence {
+    private static AdminUserPersistence adminUserPersistence;
     private String fileName;
     private File file;
 
-    public AdminUserPersistence() {
+    private AdminUserPersistence() {
         this.fileName = "admins.ser";
         this.file = new File(this.fileName);
+    }
+
+    public static AdminUserPersistence getInstance() {
+        if(adminUserPersistence == null) {
+            adminUserPersistence = new AdminUserPersistence();
+        }
+        return adminUserPersistence;
     }
 
     @Override

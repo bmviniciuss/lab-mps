@@ -12,7 +12,7 @@ import java.util.Comparator;
 import java.util.TreeSet;
 
 public class AdminUserController implements Serializable {
-
+    private static AdminUserController adminUserController;
     private TreeSet<IUser> adminUsers;
     private AdminUserPersistence adminUserPersistence;
 
@@ -20,9 +20,16 @@ public class AdminUserController implements Serializable {
     private int USER_PASSWORD_MIN_LENGTH = 8;
     private int USER_PASSWORD_MAX_LENGTH = 12;
 
-    public AdminUserController(AdminUserPersistence adminUserPersistence){
+    private AdminUserController(AdminUserPersistence adminUserPersistence){
         adminUsers = new TreeSet<>();
         this.adminUserPersistence = adminUserPersistence;
+    }
+
+    public static AdminUserController getInstance() {
+        if(adminUserController == null) {
+            adminUserController = new AdminUserController();
+        }
+        return adminUserController;
     }
 
     private void validateUserLogin(IUser adminUser) throws UserLoginValidationException {

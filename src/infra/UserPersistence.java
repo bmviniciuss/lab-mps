@@ -8,16 +8,26 @@ import java.util.TreeSet;
 
 
 public class UserPersistence implements IUserPersistence  {
+    private static UserPersistence userPersistence;
+
     private String fileName;
     private File file;
 
-    public UserPersistence() {
+    private UserPersistence() {
         this.fileName = "users.ser";
         this.file = new File(this.fileName);
     }
 
+
+    public static UserPersistence getInstance() {
+        if(userPersistence == null) {
+            userPersistence = new UserPersistence();
+        }
+        return userPersistence;
+    }
+
     @Override
-    public TreeSet<IUser> load() throws InfraException {
+        public TreeSet<IUser> load() throws InfraException {
         try {
             if(!this.file.exists()) {
                 this.file.createNewFile();

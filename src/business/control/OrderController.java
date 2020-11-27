@@ -1,24 +1,29 @@
 package business.control;
 
-import business.model.IUser;
 import business.model.Order;
+import infra.OrderPersintenceFactory;
 import infra.OrderPersistence;
 import util.InfraException;
 import util.OrderNotFoundException;
-import util.UserNotFoundException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.TreeSet;
 
 public class OrderController implements Serializable {
+    private static OrderController orderController;
     private ArrayList<Order> orders;
     private OrderPersistence orderPersistence;
 
-    public OrderController(OrderPersistence orderPersistence) {
+    private OrderController(OrderPersistence orderPersistence) {
         orders = new ArrayList<>();
         this.orderPersistence = orderPersistence;
+    }
+
+    public static OrderController getInstance() {
+        if(orderController == null) {
+            orderController = new OrderController(OrderPersintenceFactory.getPersistence());
+        }
+        return orderController;
     }
 
     public void list() throws  InfraException {

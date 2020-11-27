@@ -1,9 +1,6 @@
 package view;
 
-import business.control.DateComparator;
-import business.control.LoginComparator;
-import business.control.OrderController;
-import business.control.UserController;
+import business.control.*;
 import business.model.Date;
 import business.model.Order;
 import infra.OrderPersistence;
@@ -34,8 +31,8 @@ public class Menu {
     }
 
     public void run() {
-        UserController controller = new UserController(new UserPersistence());
-        OrderController orderController = new OrderController(new OrderPersistence());
+        UserController controller = UserControllerFactory.getController();
+        OrderController orderController = OrderControllerFactory.getController();
 
         Order order1 = new Order(new ArrayList<>());
         Order order2 = new Order(new ArrayList<>());

@@ -1,21 +1,26 @@
 package infra;
 
-import business.model.IUser;
 import business.model.Order;
 import util.InfraException;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.TreeSet;
 
 public class OrderPersistence {
-
+    private static OrderPersistence orderPersistence;
     private String fileName;
     private File file;
 
-    public OrderPersistence() {
+    private OrderPersistence() {
         this.fileName = "orders.ser";
         this.file = new File(this.fileName);
+    }
+
+    public static OrderPersistence getInstance() {
+        if(orderPersistence == null) {
+            orderPersistence = new OrderPersistence();
+        }
+        return orderPersistence;
     }
 
     public ArrayList<Order> load() throws InfraException {
