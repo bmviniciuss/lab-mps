@@ -5,6 +5,7 @@ import business.model.IUser;
 import business.model.User;
 import util.InfraException;
 import util.UserLoginValidationException;
+import util.UserNotFoundException;
 import util.UserPasswordValidationException;
 
 public class ControllerFacade {
@@ -35,5 +36,9 @@ public class ControllerFacade {
         } else if (mode.equals("birth_date")) {
             this.userController.list(new DateComparator());
         }
+    }
+
+    public void findUserByLogin(String login) throws UserNotFoundException, InfraException {
+        this.userController.listSingleUser(login);
     }
 }

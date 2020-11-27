@@ -73,7 +73,7 @@ public class Menu {
                         System.out.println("# Search User");
                         System.out.println("Login: ");
                         String toSearchLogin = reader.next();
-                        controller.listSingleUser(toSearchLogin);
+                        facade.findUserByLogin(toSearchLogin);
                         break;
                     case 5:
                         // Remover User
