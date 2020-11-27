@@ -1,17 +1,9 @@
 package view;
 
-import business.control.DateComparator;
-import business.control.LoginComparator;
-import business.control.OrderController;
-import business.control.UserController;
+import business.control.*;
 import business.model.Date;
-import business.model.Order;
-import infra.OrderPersistence;
-import infra.UserPersistence;
 import util.*;
-import business.model.User;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Menu {
@@ -34,13 +26,7 @@ public class Menu {
     }
 
     public void run() {
-        UserController controller = new UserController(new UserPersistence());
-        OrderController orderController = new OrderController(new OrderPersistence());
-
-        Order order1 = new Order(new ArrayList<>());
-        Order order2 = new Order(new ArrayList<>());
-        Order order3 = new Order(new ArrayList<>());
-
+        ControllerFacade facade = ControllerFacadeFactory.getFacade();
         while (true) {
             try {
                 Scanner reader = new Scanner(System.in);
@@ -67,40 +53,36 @@ public class Menu {
 
                         this.validateDate(date);
                         Date birth_date = new Date(date);
-
-                        User toCreateUser = new User(login, password, birth_date);
-                        controller.add(toCreateUser);
+                        facade.createUser(login, password, birth_date);
                         break;
                     case 2:
                         // List users by login
                         System.out.println("# List Users (sorted by login):");
-                        controller.list(new LoginComparator());
+                        facade.listUser("login");
                         break;
                     case 3:
                         // List users by age
                         System.out.println("# List Users (sorted by age):");
-                        controller.list(new DateComparator());
+                        facade.listUser("birth_date");
                         break;
                     case 4:
                         // Search User
                         System.out.println("# Search User");
                         System.out.println("Login: ");
                         String toSearchLogin = reader.next();
-                        controller.listSingleUser(toSearchLogin);
+                        facade.findUserByLogin(toSearchLogin);
                         break;
                     case 5:
                         // Remover User
                         System.out.println("# Remove User");
                         System.out.println("Login: ");
                         String toDeleteLogin = reader.next();
-                        controller.delete(toDeleteLogin);
+                        facade.removeUserByLogin(toDeleteLogin);
                         System.out.println("User deleted successfully.");
                         break;
                     case 6:
-                        //List orders by status
-
                         System.out.println("# List Orders (sorted by status):");
-                        orderController.list();
+                        facade.listOrders();
                         break;
                     default:
                         System.out.println("Not supported.");

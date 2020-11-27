@@ -1,51 +1,31 @@
 package business.model;
 
-import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.List;
 
-public class Order implements Serializable {
+public class Order implements OrderInterface {
 
-    private User user;
-    private ArrayList<String> list;
+    private IUser user;
+    private List<ItemInterface> itemsList;
     private String status;
-    private Date orderDate;
-    private String address;
 
-    public Order(ArrayList<String> list){
-        this.list = list;
-        this.status = "open";
+    public Order(List<ItemInterface> itemsList){
+        this.itemsList = itemsList;
+        this.status = "PENDING";
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
+    public void setUser(IUser user) {
         this.user = user;
     }
 
-    public ArrayList<String> getList() {
-        return list;
+    public IUser getUser() {
+        return user;
     }
 
-    public void setList(ArrayList<String> list) {
-        this.list = list;
+    public List<ItemInterface> getItemsList() {
+        return itemsList;
     }
 
     public String getStatus() { return status; }
 
     public void setStatus(String status) { this.status = status; }
-
-    public Date getOrderDate(){ return orderDate; }
-
-    public void setOrderDate(Date orderDate){ this.orderDate = orderDate; }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
 }

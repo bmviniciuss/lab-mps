@@ -3,6 +3,7 @@ package business.control;
 import business.model.Order;
 import business.model.User;
 import infra.IUserPersistence;
+import infra.UserPersistenceFactory;
 import util.InfraException;
 import util.UserLoginValidationException;
 import util.UserNotFoundException;
@@ -14,7 +15,7 @@ import java.util.Comparator;
 import java.util.TreeSet;
 
 public class UserController implements Serializable {
-
+    private static UserController userController;
     private TreeSet<IUser> users;
     private IUserPersistence userPersistence;
 
@@ -22,10 +23,18 @@ public class UserController implements Serializable {
     private int USER_PASSWORD_MIN_LENGTH = 8;
     private int USER_PASSWORD_MAX_LENGTH = 12;
 
-    public UserController(IUserPersistence userPersistence){
+    private UserController(IUserPersistence userPersistence){
         users = new TreeSet<>();
         this.userPersistence = userPersistence;
     }
+
+    static public UserController getInstance() {
+        if(userController == null) {
+            userController = new UserController(UserPersistenceFactory.getPersistence());
+        }
+        return userController;
+    }
+
 
     private void validateUserLogin(IUser user) throws UserLoginValidationException {
         if(user.getLogin().isEmpty()) {
