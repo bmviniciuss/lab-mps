@@ -28,4 +28,12 @@ public class ControllerFacade {
         this.userController.add(toCreateUser);
         return toCreateUser;
     }
+
+    public void listUser(String mode) throws InfraException {
+        if(mode.equals("login")) {
+            this.userController.list(new LoginComparator());
+        } else if (mode.equals("birth_date")) {
+            this.userController.list(new DateComparator());
+        }
+    }
 }

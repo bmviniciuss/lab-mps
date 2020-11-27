@@ -61,12 +61,12 @@ public class Menu {
                     case 2:
                         // List users by login
                         System.out.println("# List Users (sorted by login):");
-                        controller.list(new LoginComparator());
+                        facade.listUser("login");
                         break;
                     case 3:
                         // List users by age
                         System.out.println("# List Users (sorted by age):");
-                        controller.list(new DateComparator());
+                        facade.listUser("birth_date");
                         break;
                     case 4:
                         // Search User
