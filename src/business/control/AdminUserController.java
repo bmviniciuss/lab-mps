@@ -1,6 +1,5 @@
 package business.control;
 
-import business.model.AdminUser;
 import business.model.IUser;
 import infra.AdminUserPersistence;
 import util.InfraException;
