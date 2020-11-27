@@ -41,4 +41,8 @@ public class ControllerFacade {
     public void findUserByLogin(String login) throws UserNotFoundException, InfraException {
         this.userController.listSingleUser(login);
     }
+
+    public void removeUserByLogin(String login) throws UserNotFoundException, InfraException {
+        this.userController.delete(login);
+    }
 }

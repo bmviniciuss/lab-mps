@@ -80,7 +80,7 @@ public class Menu {
                         System.out.println("# Remove User");
                         System.out.println("Login: ");
                         String toDeleteLogin = reader.next();
-                        controller.delete(toDeleteLogin);
+                        facade.removeUserByLogin(toDeleteLogin);
                         System.out.println("User deleted successfully.");
                         break;
                     case 6:
