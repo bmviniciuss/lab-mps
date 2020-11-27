@@ -8,12 +8,15 @@ import util.UserLoginValidationException;
 import util.UserNotFoundException;
 import util.UserPasswordValidationException;
 
+
 public class ControllerFacade {
     private static ControllerFacade controllerFacade;
     private UserController userController;
+    private OrderController orderController;
 
     private ControllerFacade() {
         this.userController = UserControllerFactory.getController();
+        this.orderController = OrderControllerFactory.getController();
     }
 
     public static ControllerFacade getInstance() {
@@ -44,5 +47,9 @@ public class ControllerFacade {
 
     public void removeUserByLogin(String login) throws UserNotFoundException, InfraException {
         this.userController.delete(login);
+    }
+
+    public void listOrders() throws InfraException {
+        this.orderController.list();
     }
 }

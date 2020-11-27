@@ -3,7 +3,6 @@ package view;
 import business.control.*;
 import business.model.Date;
 import util.*;
-import business.model.User;
 
 import java.util.Scanner;
 
@@ -27,8 +26,6 @@ public class Menu {
     }
 
     public void run() {
-        UserController controller = UserControllerFactory.getController();
-        OrderController orderController = OrderControllerFactory.getController();
         ControllerFacade facade = ControllerFacadeFactory.getFacade();
         while (true) {
             try {
@@ -84,10 +81,8 @@ public class Menu {
                         System.out.println("User deleted successfully.");
                         break;
                     case 6:
-                        //List orders by status
-
                         System.out.println("# List Orders (sorted by status):");
-                        orderController.list();
+                        facade.listOrders();
                         break;
                     default:
                         System.out.println("Not supported.");

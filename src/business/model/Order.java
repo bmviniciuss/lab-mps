@@ -8,10 +8,13 @@ public class Order implements OrderInterface {
     private List<ItemInterface> itemsList;
     private String status;
 
-    public Order(User user, List<ItemInterface> itemsList){
-        this.user = user;
+    public Order(List<ItemInterface> itemsList){
         this.itemsList = itemsList;
         this.status = "PENDING";
+    }
+
+    public void setUser(IUser user) {
+        this.user = user;
     }
 
     public IUser getUser() {
