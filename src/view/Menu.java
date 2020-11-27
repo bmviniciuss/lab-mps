@@ -29,7 +29,7 @@ public class Menu {
     public void run() {
         UserController controller = UserControllerFactory.getController();
         OrderController orderController = OrderControllerFactory.getController();
-
+        ControllerFacade facade = ControllerFacadeFactory.getFacade();
         while (true) {
             try {
                 Scanner reader = new Scanner(System.in);
@@ -56,9 +56,7 @@ public class Menu {
 
                         this.validateDate(date);
                         Date birth_date = new Date(date);
-
-                        User toCreateUser = new User(login, password, birth_date);
-                        controller.add(toCreateUser);
+                        facade.createUser(login, password, birth_date);
                         break;
                     case 2:
                         // List users by login
