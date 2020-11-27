@@ -1,84 +1,82 @@
 package business.control;
 
-import business.model.Order;
-import business.model.User;
-import infra.IUserPersistence;
+import business.model.AdminUser;
+import business.model.IUser;
+import infra.AdminUserPersistence;
 import util.InfraException;
 import util.UserLoginValidationException;
 import util.UserNotFoundException;
 import util.UserPasswordValidationException;
-import business.model.IUser;
-
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.TreeSet;
 
-public class UserController implements Serializable {
+public class AdminUserController implements Serializable {
 
-    private TreeSet<IUser> users;
-    private IUserPersistence userPersistence;
+    private TreeSet<IUser> adminUsers;
+    private AdminUserPersistence adminUserPersistence;
 
     private int USER_LOGIN_MAX_LENGTH = 20;
     private int USER_PASSWORD_MIN_LENGTH = 8;
     private int USER_PASSWORD_MAX_LENGTH = 12;
 
-    public UserController(IUserPersistence userPersistence){
-        users = new TreeSet<>();
-        this.userPersistence = userPersistence;
+    public AdminUserController(AdminUserPersistence adminUserPersistence){
+        adminUsers = new TreeSet<>();
+        this.adminUserPersistence = adminUserPersistence;
     }
 
-    private void validateUserLogin(IUser user) throws UserLoginValidationException {
-        if(user.getLogin().isEmpty()) {
+    private void validateUserLogin(IUser adminUser) throws UserLoginValidationException {
+        if(adminUser.getLogin().isEmpty()) {
             throw new UserLoginValidationException("A login must me provided.");
         }
 
-        if(user.getLogin().length() > this.USER_LOGIN_MAX_LENGTH) {
+        if(adminUser.getLogin().length() > this.USER_LOGIN_MAX_LENGTH) {
             throw new UserLoginValidationException("Login cannot be longer than " + this.USER_LOGIN_MAX_LENGTH);
         }
 
-        if(user.getLogin().matches(".*\\d.*")) {
+        if(adminUser.getLogin().matches(".*\\d.*")) {
             throw new UserLoginValidationException("Login cannot contain a number");
         }
     }
 
-    private void validateUserPassword(IUser user) throws UserPasswordValidationException {
-        if(user.getPassword().isEmpty()) {
+    private void validateUserPassword(IUser adminUser) throws UserPasswordValidationException {
+        if(adminUser.getPassword().isEmpty()) {
             throw new UserPasswordValidationException("A password must be provided");
         }
 
-        if(user.getPassword().length() > this.USER_PASSWORD_MAX_LENGTH) {
+        if(adminUser.getPassword().length() > this.USER_PASSWORD_MAX_LENGTH) {
             throw new UserPasswordValidationException("Password cannot be longer than "
                     + this.USER_PASSWORD_MAX_LENGTH);
         }
 
-        if(user.getPassword().length() < this.USER_PASSWORD_MIN_LENGTH) {
+        if(adminUser.getPassword().length() < this.USER_PASSWORD_MIN_LENGTH) {
             throw new UserPasswordValidationException("Password cannot be smaller than "
                     + this.USER_PASSWORD_MIN_LENGTH);
         }
 
-        if(!(user.getPassword().matches(".*\\d.*\\d.*"))) {
+        if(!(adminUser.getPassword().matches(".*\\d.*\\d.*"))) {
             throw new UserPasswordValidationException("Password must have at least 2 numbers");
         }
 
-        if(!(user.getPassword().matches(".*[A-Za-z]+.*"))) {
+        if(!(adminUser.getPassword().matches(".*[A-Za-z]+.*"))) {
             throw new UserPasswordValidationException("Password must have letters");
         }
     }
 
-    private void validateUser(IUser user) throws UserLoginValidationException, UserPasswordValidationException {
-        this.validateUserLogin(user);
-        this.validateUserPassword(user);
+    private void validateUser(IUser adminUser) throws UserLoginValidationException, UserPasswordValidationException {
+        this.validateUserLogin(adminUser);
+        this.validateUserPassword(adminUser);
     }
 
     public void add(IUser toCreateUser) throws UserLoginValidationException, UserPasswordValidationException, InfraException {
         this.validateUser(toCreateUser);
-        this.users.add(toCreateUser);
-        this.userPersistence.save(users);
+        this.adminUsers.add(toCreateUser);
+        this.adminUserPersistence.save(adminUsers);
     }
 
     private IUser getUserByLogin(String login) throws UserNotFoundException, InfraException {
-        this.users = this.userPersistence.load();
-        for(IUser user:this.users){
+        this.adminUsers = this.adminUserPersistence.load();
+        for(IUser user:this.adminUsers){
             if(user.getLogin().equals(login)) {
                 return user;
             }
@@ -88,32 +86,29 @@ public class UserController implements Serializable {
 
     public void delete(String login) throws InfraException, UserNotFoundException {
         IUser toRemoveUser = this.getUserByLogin(login);
-        users.remove(toRemoveUser);
-        this.userPersistence.save(users);
+        adminUsers.remove(toRemoveUser);
+        this.adminUserPersistence.save(adminUsers);
     }
 
     public void listSingleUser(String login) throws InfraException, UserNotFoundException {
-        IUser user = this.getUserByLogin(login);
-        System.out.println(this.printUser(user));
+        IUser adminUser = this.getUserByLogin(login);
+        System.out.println(this.printUser(adminUser));
     }
 
     public void list(Comparator<IUser> comparator) throws  InfraException {
-        this.users = this.userPersistence.load();
-        TreeSet<IUser> sortedUsers = new TreeSet<IUser>(comparator);
-        sortedUsers.addAll(this.users);
+        this.adminUsers = this.adminUserPersistence.load();
+        TreeSet<IUser> sortedAdminUsers = new TreeSet<IUser>(comparator);
+        sortedAdminUsers.addAll(this.adminUsers);
 
-        for(IUser user : sortedUsers){
+        for(IUser user : sortedAdminUsers){
             System.out.println(this.printUser(user));
         }
     }
 
-    private String printUser(IUser user) {
+    private String printUser(IUser adminUser) {
         String s = "";
-        s += user.getLogin() + " - " + user.getBirthdate();
+        s += adminUser.getLogin() + " - " + adminUser.getBirthdate();
         return s;
     }
 
-    private void addOrder(Order order, User user){
-        user.addOrder(order);
-    }
 }

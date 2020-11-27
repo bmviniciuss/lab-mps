@@ -2,11 +2,16 @@ package view;
 
 import business.control.DateComparator;
 import business.control.LoginComparator;
+import business.control.OrderController;
 import business.control.UserController;
 import business.model.Date;
+import business.model.Order;
+import infra.OrderPersistence;
 import infra.UserPersistence;
 import util.*;
 import business.model.User;
+
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Menu {
@@ -17,6 +22,7 @@ public class Menu {
         s += "\t3 - List users by birthdate\n";
         s += "\t4 - Search user\n";
         s += "\t5 - Remove User\n";
+        s += "\t6 - List Orders by status\n";
         s += "\t0 - Exit\n";
         return s;
     }
@@ -29,6 +35,12 @@ public class Menu {
 
     public void run() {
         UserController controller = new UserController(new UserPersistence());
+        OrderController orderController = new OrderController(new OrderPersistence());
+
+        Order order1 = new Order(new ArrayList<>());
+        Order order2 = new Order(new ArrayList<>());
+        Order order3 = new Order(new ArrayList<>());
+
         while (true) {
             try {
                 Scanner reader = new Scanner(System.in);
@@ -83,6 +95,12 @@ public class Menu {
                         String toDeleteLogin = reader.next();
                         controller.delete(toDeleteLogin);
                         System.out.println("User deleted successfully.");
+                        break;
+                    case 6:
+                        //List orders by status
+
+                        System.out.println("# List Orders (sorted by status):");
+                        orderController.list();
                         break;
                     default:
                         System.out.println("Not supported.");

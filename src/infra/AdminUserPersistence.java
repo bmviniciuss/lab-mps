@@ -2,17 +2,15 @@ package infra;
 
 import business.model.IUser;
 import util.InfraException;
-
 import java.io.*;
 import java.util.TreeSet;
 
-
-public class UserPersistence implements IUserPersistence  {
+public class AdminUserPersistence implements IUserPersistence {
     private String fileName;
     private File file;
 
-    public UserPersistence() {
-        this.fileName = "users.ser";
+    public AdminUserPersistence() {
+        this.fileName = "admins.ser";
         this.file = new File(this.fileName);
     }
 
@@ -34,7 +32,6 @@ public class UserPersistence implements IUserPersistence  {
         } catch (EOFException e) {
             return new TreeSet<IUser>();
         } catch (IOException | ClassNotFoundException e) {
-//            System.err.println(e);
             throw new InfraException("An unexpected error has occurred.");
         }
     }
@@ -51,7 +48,6 @@ public class UserPersistence implements IUserPersistence  {
             fos.close();
 
         } catch (IOException e) {
-//            System.err.println(e);
             throw new InfraException("An unexpected error has occurred.");
         }
     }
