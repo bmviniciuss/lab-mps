@@ -2,13 +2,9 @@ package view;
 
 import business.control.*;
 import business.model.Date;
-import business.model.Order;
-import infra.OrderPersistence;
-import infra.UserPersistence;
 import util.*;
 import business.model.User;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Menu {
@@ -33,10 +29,6 @@ public class Menu {
     public void run() {
         UserController controller = UserControllerFactory.getController();
         OrderController orderController = OrderControllerFactory.getController();
-
-        Order order1 = new Order(new ArrayList<>());
-        Order order2 = new Order(new ArrayList<>());
-        Order order3 = new Order(new ArrayList<>());
 
         while (true) {
             try {
