@@ -1,6 +1,6 @@
 package business.control;
 
-import business.model.Order;
+import business.model.OrderInterface;
 import infra.OrderPersintenceFactory;
 import infra.OrderPersistence;
 import util.InfraException;
@@ -8,14 +8,15 @@ import util.OrderNotFoundException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class OrderController implements Serializable {
     private static OrderController orderController;
-    private ArrayList<Order> orders;
+    private List<OrderInterface> orders;
     private OrderPersistence orderPersistence;
 
     private OrderController(OrderPersistence orderPersistence) {
-        orders = new ArrayList<>();
+        this.orders = new ArrayList<OrderInterface>();
         this.orderPersistence = orderPersistence;
     }
 
@@ -29,17 +30,14 @@ public class OrderController implements Serializable {
     public void list() throws  InfraException {
         this.orders = this.orderPersistence.load();
 
-        //TreeSet<Order> sortedOrders = new TreeSet<Order>(comparator);
-        //sortedOrders.addAll(this.orders);
-
-        for(Order order : orders){
+        for(OrderInterface order : orders){
             System.out.println(order.getStatus());
         }
     }
 
-    public Order getOrderByStatus(String status) throws OrderNotFoundException, InfraException {
+    public OrderInterface getOrderByStatus(String status) throws OrderNotFoundException, InfraException {
         this.orders = this.orderPersistence.load();
-        for (Order order : this.orders) {
+        for (OrderInterface order : this.orders) {
             if (order.getStatus().equals(status)) {
                 return order;
             }
@@ -47,12 +45,12 @@ public class OrderController implements Serializable {
         throw new OrderNotFoundException();
     }
 
-    public void add(Order toCreateOrder) throws InfraException {
+    public void add(OrderInterface toCreateOrder) throws InfraException {
         this.orders.add(toCreateOrder);
         this.orderPersistence.save(orders);
     }
 
-    public void updateStatus(Order order, String status){
+    public void updateStatus(OrderInterface order, String status){
         order.setStatus(status);
     }
 }

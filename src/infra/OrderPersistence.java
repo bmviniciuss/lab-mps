@@ -1,10 +1,11 @@
 package infra;
 
-import business.model.Order;
+import business.model.OrderInterface;
 import util.InfraException;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class OrderPersistence {
     private static OrderPersistence orderPersistence;
@@ -23,7 +24,7 @@ public class OrderPersistence {
         return orderPersistence;
     }
 
-    public ArrayList<Order> load() throws InfraException {
+    public List<OrderInterface> load() throws InfraException {
         try {
             if(!this.file.exists()) {
                 this.file.createNewFile();
@@ -31,31 +32,28 @@ public class OrderPersistence {
 
             FileInputStream fis = new FileInputStream(this.file);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            ArrayList<Order> orders = (ArrayList) ois.readObject();
+            List<OrderInterface> orders = (List) ois.readObject();
 
             ois.close();
             fis.close();
 
             return orders;
         } catch (EOFException e) {
-            return new ArrayList<Order>();
+            return new ArrayList<>();
         } catch (IOException | ClassNotFoundException e) {
 //            System.err.println(e);
             throw new InfraException("An unexpected error has occurred on load.");
         }
     }
 
-    public void save(ArrayList<Order> orders) throws InfraException{
+    public void save(List<OrderInterface> orders) throws InfraException{
         try{
             this.file.createNewFile();
             FileOutputStream fos = new FileOutputStream(this.file, false);
-            System.out.println("chamou1");
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-            System.out.println("chamou 2");
             oos.writeObject(orders); //aqui
             oos.close();
             fos.close();
-            System.out.println("chamou 3");
         } catch (IOException e) {
 //            System.err.println(e);
             throw new InfraException("An unexpected error has occurred on save.");
