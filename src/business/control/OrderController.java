@@ -31,7 +31,7 @@ public class OrderController implements Serializable {
         this.orders = this.orderPersistence.load();
 
         for(OrderInterface order : orders){
-            System.out.println(order.getStatus());
+            System.out.println("#" + order.getId() + " - " + order.getStatus());
         }
     }
 
@@ -39,6 +39,16 @@ public class OrderController implements Serializable {
         this.orders = this.orderPersistence.load();
         for (OrderInterface order : this.orders) {
             if (order.getStatus().equals(status)) {
+                return order;
+            }
+        }
+        throw new OrderNotFoundException();
+    }
+
+    public OrderInterface getOrderById(int id) throws OrderNotFoundException, InfraException {
+        this.orders = this.orderPersistence.load();
+        for (OrderInterface order : this.orders) {
+            if (order.getId() == id) {
                 return order;
             }
         }

@@ -1,12 +1,9 @@
 package business.control;
 
-import business.model.Date;
-import business.model.IUser;
-import business.model.User;
-import util.InfraException;
-import util.UserLoginValidationException;
-import util.UserNotFoundException;
-import util.UserPasswordValidationException;
+import business.model.*;
+import util.*;
+
+import java.util.List;
 
 
 public class ControllerFacade {
@@ -26,7 +23,6 @@ public class ControllerFacade {
         return controllerFacade;
     }
 
-
     public IUser createUser(String login, String password, Date birth_date) throws UserLoginValidationException, UserPasswordValidationException, InfraException {
         User toCreateUser = new User(login, password, birth_date);
         this.userController.add(toCreateUser);
@@ -41,12 +37,22 @@ public class ControllerFacade {
         }
     }
 
-    public void findUserByLogin(String login) throws UserNotFoundException, InfraException {
-        this.userController.listSingleUser(login);
+    public IUser findUserByLogin(String login) throws UserNotFoundException, InfraException {
+        IUser user = this.userController.listSingleUser(login);
+        return user;
     }
 
     public void removeUserByLogin(String login) throws UserNotFoundException, InfraException {
         this.userController.delete(login);
+    }
+
+    public void addOrder(int id, List<ItemInterface> items) throws InfraException {
+        Order toCreateOrder = new Order(id, items);
+        this.orderController.add(toCreateOrder);
+    }
+
+    public OrderInterface getOrderById(int id) throws OrderNotFoundException, InfraException {
+        return orderController.getOrderById(id);
     }
 
     public void listOrders() throws InfraException {

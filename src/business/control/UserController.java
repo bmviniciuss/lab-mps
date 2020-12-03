@@ -101,9 +101,10 @@ public class UserController implements Serializable {
         this.userPersistence.save(users);
     }
 
-    public void listSingleUser(String login) throws InfraException, UserNotFoundException {
+    public IUser listSingleUser(String login) throws InfraException, UserNotFoundException {
         IUser user = this.getUserByLogin(login);
         System.out.println(this.printUser(user));
+        return user;
     }
 
     public void list(Comparator<IUser> comparator) throws  InfraException {
