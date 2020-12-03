@@ -8,4 +8,5 @@ public interface OrderInterface extends Serializable {
     public List<ItemInterface> getItemsList() ;
     public String getStatus();
     public void setStatus(String status);
+    public int getId();
 }
