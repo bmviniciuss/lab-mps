@@ -14,7 +14,8 @@ public class AddCommand implements Command{
 
     ControllerFacade facade = ControllerFacadeFactory.getFacade();
 
-    public void execute(CheckoutController controller) throws OrderNotFoundException, InfraException, UserNotFoundException, RepeatedOrderIdException {
+    public void execute() throws OrderNotFoundException, InfraException, UserNotFoundException, RepeatedOrderIdException {
+        CheckoutController controller = CheckoutControllerFactory.getController();
 
         Scanner reader = new Scanner(System.in);
 

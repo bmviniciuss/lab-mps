@@ -18,6 +18,13 @@ public class CheckoutPersistence {
         this.file = new File(this.fileName);
     }
 
+    public static CheckoutPersistence getInstance() {
+        if(persistence == null) {
+            persistence = new CheckoutPersistence();
+        }
+        return persistence;
+    }
+
     public List<Checkout> load() throws InfraException {
         try {
             if(!this.file.exists()) {
