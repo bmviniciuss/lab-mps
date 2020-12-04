@@ -4,8 +4,8 @@ import util.*;
 
 public interface Command {
 
-    public void execute(CheckoutController controller) throws OrderNotFoundException, InfraException, UserNotFoundException, CheckoutNotFoundException, RepeatedOrderIdException;
+    public void execute() throws OrderNotFoundException, InfraException, UserNotFoundException, RepeatedOrderIdException, CheckoutNotFoundException;
 
-    public  void undo();
+    public  void undo() throws InfraException, CheckoutNotFoundException;
 
 }

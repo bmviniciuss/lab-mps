@@ -23,6 +23,7 @@ public class Menu {
         s += "\t7 - Add checkout\n";
         s += "\t8 - Update checkout status\n";
         s += "\t9 - Search checkout by order ID\n";
+        s += "\t10 - Undo checkout status change\n";
         s += "\t0 - Exit\n";
         return s;
     }
@@ -92,7 +93,7 @@ public class Menu {
                         break;
                     case 6:
                         //Adding orders manually
-                        /*Item item1 = new Item("Produto 1", 5);
+                        Item item1 = new Item("Produto 1", 5);
                         Item item2 = new Item("Produto 2", 10);
                         Item item3 = new Item("Produto 3", 15);
 
@@ -104,7 +105,7 @@ public class Menu {
 
                         facade.addOrder(1, order);
                         facade.addOrder(2, order);
-                        facade.addOrder(3, order);*/
+                        facade.addOrder(3, order);
 
                         System.out.println("# List Orders (sorted by status):");
                         facade.listOrders();
@@ -120,6 +121,10 @@ public class Menu {
                     case 9:
                         // Search checkout
                         checkoutFacade.searchCheckout();
+                        break;
+                    case 10:
+                        // Undo checkout change
+                        checkoutFacade.undoCheckout();
                         break;
                     default:
                         System.out.println("Not supported.");
