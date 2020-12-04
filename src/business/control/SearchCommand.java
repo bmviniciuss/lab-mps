@@ -8,9 +8,8 @@ import java.util.Scanner;
 
 public class SearchCommand  implements Command{
 
-    ControllerFacade facade = ControllerFacadeFactory.getFacade();
-
-    public void execute(CheckoutController controller) throws CheckoutNotFoundException, InfraException {
+    public void execute() throws CheckoutNotFoundException, InfraException {
+        CheckoutController controller = CheckoutControllerFactory.getController();
 
         Scanner reader = new Scanner(System.in);
 

@@ -8,6 +8,7 @@ public class Checkout implements Serializable {
     private String receipt;
     private float price;
     private String status;
+    private CheckoutStatusCareTaker checkoutStatusCareTaker;
 
     public Checkout (OrderInterface order, IUser user, String receipt, float price) {
         this.order = order;
@@ -15,14 +16,20 @@ public class Checkout implements Serializable {
         this.receipt = receipt;
         this.price = price;
         this.status = "PENDING UPLOAD";
+        this.checkoutStatusCareTaker = new CheckoutStatusCareTaker();
     }
 
     public String getStatus() {
-        return status;
+        return this.status;
     }
 
     public void setStatus(String status) {
+        this.checkoutStatusCareTaker.addMemento(new CheckoutStatusMemento(this.status));
         this.status = status;
+    }
+
+    public void undo() {
+        this.status = this.checkoutStatusCareTaker.getLastStatus().getStatus();
     }
 
     public String getReceipt() {

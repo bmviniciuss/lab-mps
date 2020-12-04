@@ -4,8 +4,8 @@ import util.*;
 
 public class Invoker {
 
-    public void execute(CheckoutController controller, Command command) throws UserNotFoundException, CheckoutNotFoundException, InfraException, OrderNotFoundException, RepeatedOrderIdException {
-            command.execute(controller);
+    public void execute(Command command) throws UserNotFoundException, CheckoutNotFoundException, InfraException, OrderNotFoundException, RepeatedOrderIdException {
+            command.execute();
     }
 
 }

@@ -12,14 +12,18 @@ public class CheckoutFacade {
     }
 
     public void addCheckout() throws UserNotFoundException, CheckoutNotFoundException, InfraException, RepeatedOrderIdException, OrderNotFoundException {
-        invoker.execute(new CheckoutController(new CheckoutPersistence()), new AddCommand());
+        invoker.execute(new AddCommand());
     }
 
     public void updateCheckout() throws UserNotFoundException, CheckoutNotFoundException, InfraException, RepeatedOrderIdException, OrderNotFoundException {
-        invoker.execute(new CheckoutController(new CheckoutPersistence()), new UpdateCommand());
+        invoker.execute(new UpdateCommand());
     }
 
     public void searchCheckout() throws UserNotFoundException, CheckoutNotFoundException, InfraException, RepeatedOrderIdException, OrderNotFoundException {
-        invoker.execute(new CheckoutController(new CheckoutPersistence()), new SearchCommand());
+        invoker.execute(new SearchCommand());
+    }
+
+    public void undoCheckout() throws UserNotFoundException, CheckoutNotFoundException, InfraException, RepeatedOrderIdException, OrderNotFoundException {
+        invoker.undo(new UpdateCommand());
     }
 }

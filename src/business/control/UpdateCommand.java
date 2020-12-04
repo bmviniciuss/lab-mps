@@ -1,18 +1,14 @@
 package business.control;
 
 import business.model.Checkout;
-import business.model.OrderInterface;
-import util.CheckoutNotFoundException;
-import util.InfraException;
+import util.*;
 
 import java.util.Scanner;
 
 public class UpdateCommand implements Command {
 
-    ControllerFacade facade = ControllerFacadeFactory.getFacade();
-
-    public void execute(CheckoutController controller) throws CheckoutNotFoundException, InfraException {
-
+    public void execute() throws CheckoutNotFoundException, InfraException {
+        CheckoutController controller = CheckoutControllerFactory.getController();
         Scanner reader = new Scanner(System.in);
 
         System.out.println("Insert checkout order id:");
@@ -26,7 +22,15 @@ public class UpdateCommand implements Command {
     }
 
     @Override
-    public void undo() {
+    public void undo() throws InfraException, CheckoutNotFoundException {
+        CheckoutController controller = CheckoutControllerFactory.getController();
 
+        Scanner reader = new Scanner(System.in);
+
+        System.out.println("Insert checkout order id:");
+        int id = Integer.parseInt(reader.next());
+        Checkout checkout = controller.getCheckoutByOrderId(id);
+
+        controller.undoStatus(checkout);
     }
 }

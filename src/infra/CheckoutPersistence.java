@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CheckoutPersistence {
-
+    private static CheckoutPersistence persistence;
     private String fileName;
     private File file;
 
@@ -35,7 +35,7 @@ public class CheckoutPersistence {
         } catch (EOFException e) {
             return new ArrayList<>();
         } catch (IOException | ClassNotFoundException e) {
-//            System.err.println(e);
+            System.err.println(e);
             throw new InfraException("An unexpected error has occurred on load.");
         }
     }
@@ -49,7 +49,7 @@ public class CheckoutPersistence {
             oos.close();
             fos.close();
         } catch (IOException e) {
-//            System.err.println(e);
+            System.err.println(e);
             throw new InfraException("An unexpected error has occurred on save.");
         }
     }

@@ -2,6 +2,7 @@ package business.control;
 
 import business.model.Checkout;
 import infra.CheckoutPersistence;
+import infra.CheckoutPersitenceFactory;
 import util.CheckoutNotFoundException;
 import util.InfraException;
 import util.RepeatedOrderIdException;
@@ -13,10 +14,18 @@ import java.util.List;
 public class CheckoutController implements Serializable {
     private List<Checkout> checkouts;
     private CheckoutPersistence checkoutPersistence;
+    private static CheckoutController controller;
 
-    public CheckoutController(CheckoutPersistence checkoutPersistence) {
+    private CheckoutController(CheckoutPersistence checkoutPersistence) {
         this.checkouts = new ArrayList<>();
         this.checkoutPersistence = checkoutPersistence;
+    }
+
+    public static CheckoutController getInstance() {
+        if (controller == null) {
+            controller = new CheckoutController(CheckoutPersitenceFactory.getPersistence());
+        }
+        return controller;
     }
 
     public void list() throws InfraException {
@@ -63,6 +72,11 @@ public class CheckoutController implements Serializable {
 
     public void updateStatus(Checkout checkout, String status) throws InfraException{
         checkout.setStatus(status);
+        this.checkoutPersistence.save(checkouts);
+    }
+
+    public void undoStatus(Checkout checkout) throws InfraException{
+        checkout.undo();
         this.checkoutPersistence.save(checkouts);
     }
 }
