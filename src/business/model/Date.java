@@ -34,6 +34,6 @@ public class Date implements Serializable {
     }
 
     public String toString() {
-        return this.day + "/" + this.getMonth() + "/" + this.getYear();
+        return this.getDay() + "/" + this.getMonth() + "/" + this.getYear();
     }
 }
